@@ -1,0 +1,13 @@
+{{ define "main" }}
+  <h1 class="category-title">{{ .Title | title }}</h1>
+
+  <div class="post-list">
+    {{ range .Pages.ByDate.Reverse }}
+      <article class="post-item">
+        <time>{{ .Date.Format "2006 年 1 月 2 日" }}</time>
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <p class="summary">{{ .Summary | plainify | truncate 100 }}…</p>
+      </article>
+    {{ end }}
+  </div>
+{{ end }}

@@ -1,0 +1,63 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+
+  <!-- 直接链接到 static 根目录下的 style.css -->
+  <link rel="stylesheet" href="/style.css">
+</head>
+<!-- 右上角图标区域 -->
+<div class="top-right-icons">
+  <!-- 回到首页（圆点或 home 图标） -->
+  <a href="/" class="icon home" title="回到首页" aria-label="回到首页">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+  </a>
+
+  <!-- 菜单（汉堡图标） -->
+  <button class="icon menu" id="menu-toggle" title="菜单" aria-label="打开菜单">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+      <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+    </svg>
+  </button>
+</div>
+
+<!-- 汉堡菜单内容 -->
+<nav class="mobile-menu" id="mobile-menu">
+  <button id="menu-close" class="close-btn">×</button>
+  {{ range .Site.Menus.main }}
+    <a href="{{ .URL }}">{{ .Name }}</a>
+  {{ end }}
+</nav>
+<body>
+
+<header>
+  <h1><a href="/">{{ .Site.Title }}</a></h1>
+  {{ if not .IsHome }}
+    <nav>
+      {{ range .Site.Menus.main }}
+        <a href="{{ .URL }}">{{ .Name }}</a>
+      {{ end }}
+    </nav>
+  {{ end }}
+</header>
+
+  <main>
+    {{ block "main" . }}{{ end }}
+  </main>
+
+    <footer>
+    <p>
+        Copyright © {{ now.Format "2006" }} 李走走<br>
+        生活在那时看似没有悲欢，只是将所有的节气揭下日历。<br>
+        本站所有作品均为原创，未经明确授权，禁止任何形式的转载、复制或商业使用。<br>
+        如需联系或引用，请邮件：<a href="mailto:lizouzou1213@gmail.com">lizouzou1213@gmail.com</a><br>
+        写下的都是不肯愈合的，感谢 Grok 不间断地技术协助。
+    </p>
+    </footer>
+
+  <!-- 直接链接到 static 根目录下的 scripts.js -->
+  <script src="/scripts.js"></script>
+
+</body>
