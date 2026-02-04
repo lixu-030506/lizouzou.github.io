@@ -6,6 +6,28 @@
 
   <!-- 直接链接到 static 根目录下的 style.css -->
   <link rel="stylesheet" href="/style.css">
+  <script>
+  // 禁止右键菜单
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
+
+  // 禁止文字选择（大部分浏览器有效）
+  document.body.style.userSelect = 'none';
+  document.body.style.webkitUserSelect = 'none';
+  document.body.style.mozUserSelect = 'none';
+  document.body.style.msUserSelect = 'none';
+  </script>
+
+  <style>
+    /* 加强禁止选择（备用） */
+    body, p, h1, h2, h3, article, .post-content, .quote-text {
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+    }
+  </style>
 </head>
 <!-- 右上角图标区域 -->
 <div class="top-right-icons">
