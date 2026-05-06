@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,83 +12,96 @@
   <link rel="manifest" href="/images/favicon/site.webmanifest" />
   <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
 
-  <!-- 直接链接到 static 根目录下的 style.css -->
   <link rel="stylesheet" href="/style.css">
-  <script>
-  // 禁止右键菜单
-  document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
-
-  // 禁止文字选择（大部分浏览器有效）
-  document.body.style.userSelect = 'none';
-  document.body.style.webkitUserSelect = 'none';
-  document.body.style.mozUserSelect = 'none';
-  document.body.style.msUserSelect = 'none';
-  </script>
-
-  <style>
-    /* 加强禁止选择（备用） */
-    body, p, h1, h2, h3, article, .post-content, .quote-text {
-      user-select: none !important;
-      -webkit-user-select: none !important;
-      -moz-user-select: none !important;
-      -ms-user-select: none !important;
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 </head>
-<!-- 右上角图标区域 -->
-<div class="top-right-icons">
-  <!-- 回到首页（圆点或 home 图标） -->
-  <a href="/index.html" class="icon home" title="回到首页" aria-label="回到首页">
-    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-    </svg>
-  </a>
+<body{{ if .IsHome }} class="is-home"{{ end }}>
+  <!-- 自定义光标 -->
+  <div class="custom-cursor" id="cursor"></div>
 
-  <!-- 菜单（汉堡图标） -->
-  <button class="icon menu" id="menu-toggle" title="菜单" aria-label="打开菜单">
-    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-      <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-    </svg>
-  </button>
-</div>
+  <!-- 粒子 Canvas（全屏背景） -->
+  <canvas id="particle-canvas"></canvas>
 
-<!-- 汉堡菜单内容 -->
-<nav class="mobile-menu" id="mobile-menu">
-  <button id="menu-close" class="close-btn">×</button>
-  {{ range .Site.Menus.main }}
-    <a href="{{ .URL }}">{{ .Name }}</a>
+  <!-- 右上角控制栏 -->
+  <div class="top-right" id="top-controls">
+    <button class="theme-toggle" id="theme-toggle" aria-label="切换主题">
+      <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+
+    <a href="/" class="icon-btn" title="回到首页" aria-label="回到首页">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </a>
+
+    <button class="icon-btn" id="menu-toggle" title="菜单" aria-label="打开菜单">
+      <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </button>
+  </div>
+
+  <!-- 全屏菜单 -->
+  <nav class="full-menu" id="full-menu">
+    <button class="close-btn" id="menu-close" aria-label="关闭菜单">&times;</button>
+    <a href="/">首页</a>
+    <a href="/categories/poetry/">诗歌</a>
+    <a href="/categories/prose/">散文</a>
+    <a href="/categories/review/">评论</a>
+    <a href="/categories/novel/">小说</a>
+    <a href="/about/">关于</a>
+  </nav>
+
+  <!-- 首页 Hero（突破容器，全屏） -->
+  {{ if .IsHome }}
+  <section class="hero" id="hero">
+    <h1 class="hero-title" id="hero-title" title="试试连续点击三次">
+      <!-- 英文版：占据文档流，决定容器宽度 -->
+      <span class="title-layer title-en" id="title-en">A Poetry Handbook Where Inspiration Outweighs Language</span>
+      <!-- 中文版：绝对定位叠在英文上面 -->
+      <span class="title-layer title-cn" id="title-cn">灵感大于语言的诗歌手册</span>
+    </h1>
+    <p class="hero-subtitle">诗歌 &middot; 散文 &middot; 评论 &middot; 小说</p>
+    <div class="hero-scroll">
+      <span>向下滚动</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
   {{ end }}
-</nav>
-<body>
 
-<header>
-  <h1><a href="/">{{ .Site.Title }}</a></h1>
-  {{ if not .IsHome }}
-    <nav>
-      {{ range .Site.Menus.main }}
-        <a href="{{ .URL }}">{{ .Name }}</a>
+  <!-- 页面内容（容器内） -->
+  <div class="page-wrapper">
+    <div class="container">
+      {{ if not .IsHome }}
+      <header>
+        <h1><a href="/">{{ .Site.Title }}</a></h1>
+        <nav>
+          <a href="/categories/poetry/">诗歌</a>
+          <a href="/categories/prose/">散文</a>
+          <a href="/categories/review/">评论</a>
+          <a href="/categories/novel/">小说</a>
+          <a href="/about/">关于</a>
+        </nav>
+      </header>
       {{ end }}
-    </nav>
-  {{ end }}
-</header>
 
-  <main>
-    {{ block "main" . }}{{ end }}
-  </main>
+      <main>
+        {{ block "main" . }}{{ end }}
+      </main>
 
-    <footer>
-    <p>
-        Copyright © {{ now.Format "2006" }} 李走走<br>
-        生活在那时看似没有悲欢，只是将所有的节气揭下日历。<br>
-        本站所有作品均为原创，未经明确授权，禁止任何形式的转载、复制或商业使用。<br>
-        如需联系或引用，请邮件：<a href="mailto:lizouzou1213@gmail.com">lizouzou1213@gmail.com</a><br>
-        写下的都是不肯愈合的，感谢 Grok 不间断地技术协助。
-    </p>
-    </footer>
+      <footer>
+        <p>
+          Copyright &copy; {{ now.Format "2006" }} 李走走<br>
+          生活在那时看似没有悲欢，只是将所有的节气揭下日历。<br>
+          本站所有作品均为原创，未经明确授权，禁止任何形式的转载、复制或商业使用。<br>
+          如需联系或引用，请邮件：<a href="mailto:lizouzou1213@gmail.com">lizouzou1213@gmail.com</a>
+        </p>
+      </footer>
+    </div>
+  </div>
 
-  <!-- 直接链接到 static 根目录下的 scripts.js -->
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="/scripts.js"></script>
-
 </body>
+</html>
