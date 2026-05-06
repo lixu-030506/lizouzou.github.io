@@ -1,13 +1,23 @@
 {{ define "main" }}
-  <h1 class="category-title">{{ .Title | title }}</h1>
 
-  <div class="post-list">
-    {{ range .Pages.ByDate.Reverse }}
-      <article class="post-item">
-        <time>{{ .Date.Format "2006 年 1 月 2 日" }}</time>
-        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-        <p class="summary">{{ .Summary | plainify | truncate 100 }}…</p>
-      </article>
-    {{ end }}
-  </div>
+<div class="category-header">
+  <h1>{{ .Title | title }}</h1>
+  <p class="category-count">共 {{ len .Pages }} 篇作品</p>
+</div>
+
+{{ range .Pages.ByDate.Reverse }}
+  <article class="post-item">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006 年 1 月 2 日" }}</time>
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    <div class="meta">
+      {{ range .Params.categories }}
+        <span class="category-tag">{{ . | title }}</span>
+      {{ end }}
+    </div>
+    <div class="summary">
+      {{ .Summary | plainify | truncate 120 }}…
+    </div>
+  </article>
+{{ end }}
+
 {{ end }}
