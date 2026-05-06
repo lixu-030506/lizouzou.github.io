@@ -1,53 +1,17 @@
 {{ define "main" }}
 
-  <!-- 左側作者 + 類別標籤 -->
-  <aside class="sidebar-left">
-    <div class="author-name">
-      李走走
-    </div>
-    <div class="categories">
-      詩歌<br>
-      散文<br>
-      評論<br>
-      小説
-    </div>
-  </aside>
+<!-- 最新作品（排除关于页等根级页面） -->
+<h2 class="section-title">最近的作品</h2>
 
-
-    <!-- 全屏背景 + 内容层 -->
-    <section class="full-screen-bg" id="intro-bg">
-    <div class="bg-layer" style="background-image: url('/images/index.jpg');"></div>
-    
-    <div class="content-overlay">
-        <div class="quote">
-        <!-- 裝飾符號放在框內，與文字緊密結合 -->
-        <div class="quote-decoration">
-        <span class="quote-open">「</span>
-        <p class="quote-text">
-            我把日常拆开来，<br>
-            重新拼成一首首不肯愈合的诗。
-        </p>
-        <span class="quote-close">」</span>
-        </div>
-        <p class="quote-source">
-            ——— 李走走 / 与grok的共创
-        </p>
-        </div>
-    </div>
-    </section>
-
-  <!-- 最新作品標題 -->
-  <h2 class="latest-title">最近的作品</h2>
-
-  <!-- 文章列表（保持原樣或微調） -->
-  {{ $pages := where site.RegularPages "Type" "posts" }}
+{{ $pages := where site.RegularPages "Section" "posts" }}
+{{ if $pages }}
   {{ range first 10 $pages.ByDate.Reverse }}
     <article class="post-item">
       <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006 年 1 月 2 日" }}</time>
       <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
       <div class="meta">
         {{ range .Params.categories }}
-          <span class="category">{{ . | title }}</span>
+          <span class="category-tag">{{ . | title }}</span>
         {{ end }}
       </div>
       <div class="summary">
@@ -55,5 +19,8 @@
       </div>
     </article>
   {{ end }}
+{{ else }}
+  <p style="text-align:center; color: var(--text-muted); padding: 40px 0;">暂无作品</p>
+{{ end }}
 
 {{ end }}
