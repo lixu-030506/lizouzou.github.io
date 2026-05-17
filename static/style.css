@@ -643,6 +643,69 @@ header nav a:hover::after { width: 100%; }
 
 .single-post.poetry .post-content p { text-align: center; letter-spacing: 0.05em; line-height: 2.2; }
 
+/* ---------- 文章图片样式 ---------- */
+.post-images {
+  margin: 2.5em 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.post-images figure {
+  margin: 0;
+  text-align: center;
+  max-width: 100%;
+}
+
+.post-images img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-images img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.post-images figcaption {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-style: italic;
+  letter-spacing: 0.03em;
+}
+
+/* 单张图片样式（Markdown 语法） */
+.single-post .post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 2em auto;
+  display: block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.single-post .post-content img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* 暗色主题图片样式 */
+[data-theme="dark"] .post-images img,
+[data-theme="dark"] .single-post .post-content img {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .post-images img:hover,
+[data-theme="dark"] .single-post .post-content img:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
 .post-nav {
   margin-top: 80px;
   padding-top: 40px;
