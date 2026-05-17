@@ -757,6 +757,61 @@ header nav a:hover::after { width: 100%; }
 .about-page .about-contact a { color: var(--accent); text-decoration: none; }
 .about-page .about-contact a:hover { color: var(--accent-hover); }
 
+/* ---------- 原文链接模块 ---------- */
+.source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 8px 18px;
+  background: var(--tag-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.source-link .source-label {
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  position: relative;
+  padding-right: 10px;
+}
+
+.source-link .source-label::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 12px;
+  background: var(--border);
+}
+
+.source-link a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--text-muted);
+  padding-bottom: 1px;
+  transition: all 0.3s ease;
+}
+
+.source-link a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.source-link .source-name {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 /* ---------- 页脚 ---------- */
 footer {
   text-align: center;
